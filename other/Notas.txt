@@ -1,0 +1,233 @@
+* Instalar Typescript:
+npm install typescript -g (o -D para instalarlo sólo en el proyecto).
+
+* Transpile Typescript into JS. Correr en consola:
+tsc file.ts // Es la forma corta de "node [link to tcs file ((...)typescript/bin/tsc)] file.ts"
+//Si se pone simplemente tsc, compila todos los archivos del proyecto.
+tsc --locale ja File.ts -> Probar para ver si sale en japonés un mensaje de error :D
+
+* Para que Typescript use los últimos features de JS, necesita tener configurado en el tsconfig.json "ESNext" en el target del compilerOptions (
+{
+	"compilerOptions": {
+		"target": "ESNext"
+	}
+}).
+
+* TSCONFIG.JSON.
+- Otras cosas configurables en el CompilerOptions:
+  + "outDir" te permite definir dónde se crean los archivos .js que genere ("outDir": "./folder1").
+Hay una opción similar llamada "outFile" que, de ser seteada, te combina los archivos que se compilen en uno solo ("outFile": "./folder1/archivo.js"). Para esto el "module" (otra compilerOption) tiene que estar seteado en "amd" o "system" (que no conviene cambiar. El módulo más usado es "ES6" (2015) porque es reconocido por browsers y por node.js).
+  + "rootDir" te permite definir el directorio de los archivos que se quieren compilar. Todos los archivos que no estén en ese directorio, no se van a tocar ("rootDir": "./srcFolder").
+  + "noUnusedLocals", cuando es true se remarcan las variables declaradas que nunca fueron usadas.
+- Se pueden especificar archivos para excluir con:
+	"exclude": [
+		"./src/script.ts",
+		"./src/modules/box.ts ]
+El "exclude" está al nivel del CompilerOptions.
+
+* Si el environment que vamos a usar son browsers, además de configurar el módulo en el tsconfig.json file, hay que definir el módulo como parámetro del <script> tag del html file (video4_6).
+<script type="module" src="./script.js"></script>
+
+* Para preguntar si dos objetos son iguales, se hace con "===" (3).
+* La condición "or" se hace con "||" (2).
+* Math.random() -> devuelve un número entre 0 y 0.9999
+* Math.floor(floatNumber) -> devuelve el interger más bajo que le siga a un número con coma (1.6 = 1; -1.6 = -2).
+* Number(input.value) -> devuelve el string de un valor convertido a número. Si no se puede convertir a número, queda como NaN/undefined.
+* If (!var1) -> detecta si la variable var1 está undefined.
+* array1.push(4) -> agrega el valor "4" al array array1.
+* array1.forEach((item) => {}) -> permite iterar dentro del array.
+
+* Los tipos de datos en Typescript pueden ser:
+- Implícitos, inferidos por el valor que se les asigna:
+  let var1 = 5 // inferred as number
+  let var2 = "Hello" // inferred as string
+  let var3 = false // inferred as boolean
+  let var4 = [1, 2, 3] // inferred as an array that can only take numbers
+  let var5 = ["Apple", 2]; //inferred as an array that can take stringsand numbers.
+  let var6 = {} // inferred as object
+  let var7; //inferred as "any", a typescript type that you can assign any value to it.
+- O pueden ser explícitos:
+  let age: number;
+  let fruits: string[]
+  let mixedArr: (string | number)[]; //this is called Array literal syntax
+  let mixedArr: Array<number | string> //this is called Array type syntax.
+  //Literal and type syntax work the same way.
+
+* Otros tipos de datos:
+- Generic (T):
+Toma el valor de lo que reciba en el momento en el que lo usan, aunque también puede limitarse para sólo poder tomar ciertos tipos de datos diciendo de qué extiende.
+	function createbox<T extends string | number>
+Al momento de llamar a la función, se puede indicar el tipo que le estamos pasando de dos formas:
+	+ let box = createBox<number> (...)
+	+ let box = createBox({
+		id: i,
+		size: oneSize as number });
+Generic sirve para lograr tipos condicionales:
+T extends U ? X : Y
+	-> Si T extends U, entonces retorna X
+	-> Si T doesn't extend U, entonces retorna Y
+Syntaxis: type ValueType<T> = T extends string ? string[] : number[];
+Con el ejemplo del punto anterior, si agregamos esta línea antes, se podía usar así:
+"funtion processValue<T>(value: T):ValueType<T> {(...)}
+const result1 = processValue("hello"); -> acá TS entiende que result1 es string[]
+const result2 = processValue(14); -> acá TS entiende que result2 es number[]
+- Return Type:
+Permite, sin en principio conocer el tipo de datos que va a retornar una función, almacenarlo en una variable:
+	let boxes: ReturnType<typeof createBox<number>>[] = [];
+
+
+* Para crear tipos de datos, se puede hacer de la siguiente forma:
+type Favorites = "eating" | "sleeping" | 4; //This is called a "Union type"
+type Animal = {
+	name: string;
+	hobby: Favorites; //Notar que se definió como el union type que creamos antes
+};
+let cat: Animal = {
+	name: "Grafito",
+	hobby: "sleeping"
+}
+
+Mismo escenario pero con interfaces:
+interface Favorites {
+	hobbies: "eating" | "sleeping" | 4;
+};
+interface Animal {
+	name: string;
+	hobby: Favorites['hobbies'];
+};
+let cat: Animal = {
+	name: "Grafito",
+	hobby: "sleeping"
+};
+
+De esta forma también se pueden crear tuples, que son un tipo de array con tipos y largo predefinidos para cada index. Se crean y usan de la forma:
+type Animal = [string, number, string[]];
+let group1: Animal = ["Feline", 38, ["Tiger", "Cat", "Lion"]];
+
+* INTERFACES.
+Sus propiedades son públicas por defecto.
+Las "interface"s y los "type"s son propios de TS y no generan un código compilado en JS.
+Las interfaces permiten agregar un campo nuevo definiendo nuevamente la misma interfaz, y se genera un merge entre ambas (¿en qué casos se querría usar esto? Me parece que es un poco desordenado).
+Las interfaces también pueden extenderse de otra interfaz:
+interface Felino extends Animal {
+	breed: string; }
+let cat: Felino = {
+	name: "Grafito",
+	hobby: "sleeping",
+	breed: "Nebelung" };
+
+Otra forma de crear tipos de datos, "Record Type", permite definir la estructura pero no los valores:
+type Pet = Record<'Name' | 'Age' | 'Tricks', string | number | string[]>;
+let cat: Pet = {
+	Name: "Grafito",
+	Age: 7,
+	Tricks: ['Trust', 'Hunt'] };
+
+* Intersection: En TS se puede hacer una intersección de typos para lograr un efecto similar al de extender una interfaz:
+type TSuperhero = {
+	name: string;
+	powers: string[]; }
+type TUser = {
+	member: boolean; };
+type Superhero = TSuperhero & TUser & {
+	foo: string };
+const superman: Superhero = {
+	name: "Superman",
+	member: true,
+	powers: ["flight", "super strength"],
+	foo: "bar" };
+
+* FUNCIONES.
+Todas las propiedades que se declaren adentro van a ser privadas. Para hacer públicas las propiedades que se generen adentro (como pueden ser IDs dentro de un Create) se puede hacer que la función devuelva una interfaz, que por defecto sus propiedades son públicas.
+En las funciones se puede especificar o no el valor de las variables que se pasan por parámetro y se retornan. Al especificarlo permite tener un mejor control de errores:
+                              |-> Este segundo string es el de retorno.
+function greet(name:string):string {
+	return `Hi ${name}!`;
+};
+
+Una función también puede declararse en una línea y definirse después:
+let createBox: Function;
+createBox = () => {
+	[CodeHere] };
+
+* Si se usa <T> en la declaración de una función, se está indicando que la función es genérica y que puede aceptar un argumento de cualquier tipo: "function processValue<T>(value: T)".
+Se puede definir un tipo condicional para devolver un tipo distinto según qué tipo de valor sea el que me ingresó.
+
+* Se puede castear de la forma:
+let stringLength = (someValue as string).length;
+útil para inputs HTML: const inputField = document.getElementByID('amount') as HTMLInputElement;
+		       console.log(inputField.value);
+
+* Enums:
+Almacenan valores iniciales como los Union Types, pero más allá de la restricción del valor, con los enums se puede hacer un get del valor.
+enum PaymentMethod {
+	CreditCard = "CreditCard",
+	PayPal = "PayPal",
+	BankTransfer  = "BankTransfer" };
+processPayment(100, PaymentMethod.Paypal);
+
+Los Enums tienen lo que se llama "reverse mapping" para números (no para strings). Los valores numéricos dentro de los enums quedan asociados bilateralmente en el objeto del JS generado. Ej: "Small" = 40 -> se guarda en JS como "Small = 40" y como "40 = Small". Eso hace que cuando quieras usar un enum con números y pasarlo a un array tengas que filtrarlo:
+const boxSizesArray: BoxSizes[] = Object.values(BoxSizes).filter(value =>
+	typeof value === "number" || value === BoxSizes.BOMB );
+//Con esto obtenemos un array con los valores [40, 80, 120, 'BOMB'] en vez de ['Small, 'Medium', 'Large', 40, 80, 120, 'BOMB']
+//Para obtener el largo del array se usa BoxSizesArray.length;
+
+* Tipos útiles de DOM:
+  - HTMLInputElement: Para campos de texto (¿sirve para otros elementos que reciban input?)
+  - HTMLButtonElement: Para botones :B
+  - HTMLOutputElement: Para labels (¿y otros campos donde se puedan devolver datos?)
+
+* Métodos para obtener un elemento:
+  - document.getElementById('Id')
+  - document.getElementsByTagName('Name')[0]
+Estos se asignan a una variable para poder escuchar los eventos después (
+const input = document.getElementById('Something') as HTMLInputElement;
+Otros métodos útiles de document:
+  - document.createElement("div"); //let element = document.createElement("div")
+
+Cuando se crea un elemento, se lo puede estilizar a través de la clase que fue creada en css.
+Asumiendo que tenemos una clase "box" definida en el css (en el que sólo tiene definido margen y transición):
+element.classList.add("box"); //esto le asigna al div creado la clase "box" del css.
+element.style.width = `${size}px`; //asumiendo que "size" es una variable existente
+element.style.height = `${size}px`;
+element.style.backgroundColor = `rgb(60, 60, 60)` //Dark Gray
+element.setAttribute('id', `box-${id}`) //Esto le setea al div un ID del tipo "box-[ID]", siendo "id" una variable definida con anterioridad.
+document.querySelector(".wrapper")?.appendChild(element); //Esto agrega el div creado adentro de la clase "wrapper" dentro del html. el "." del ".wrapper" significa que lo que se busca es una clase. El "?" se usa para indicar que el siguiente llamado al método se haga sólo si es que existe la clase llamada "wrapper".
+
+* Agregar un listener:
+
+  -BOTÓN:
+botón.addEventListener("click", (e: MouseEvent) => {
+	console.log(e.button); });
+La propiedad "Button" del MouseEvent te dice qué botón del mouse apretó:
+0 -> Left click
+1 -> Middle click (if present)
+2 -> Right click
+
+  -ENTER:
+input.AddEventListener("keydown", (e: KeyboardEvent) => {
+	console.log(e.key); });
+
+* MÓDULOS.
+Sirven para exportar e importar código de un archivo a otro.
+- El export se define al principio de un bloque de código (function, enum, interface, etc.):
+	export enum BoxSizes { (...) }
+- El import se define al comienzo del archivo donde queremos usar el bloque de código:
+	import { BoxSizes } from "./modules/box.js";
+// Se puede usar ctrl+space dentro de las llaves del import para ver los posibles bloques de código que podemos importar de ese archivo. Se puede importar más de uno separando por coma.
+
+* CLASES.
+class CreateBox<T extends string | number> { (...) }
+//Las clases empiezan con mayúsculas por convención.
+- Propiedades:
+	private size: T;
+	public readonly id: number;
+	public readonly element: HTMLDivElement;
+- Constructores:
+	constructor(boxinfo: BoxStructure<T>) {
+		this.id = boxInfo.id;
+		this.element = document.createElement("div");
+		this.initializeBox();
+- Crear una instancia de la clase:
+	let box = new CreateBox<number> //Implícito
+	let box: CreateBox<number> //Explícito
