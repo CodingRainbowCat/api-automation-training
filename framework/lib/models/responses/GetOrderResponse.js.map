@@ -1,1 +1,0 @@
-{"version":3,"file":"GetOrderResponse.js","sourceRoot":"","sources":["../../../src/models/responses/GetOrderResponse.ts"],"names":[],"mappings":"AAIA,MAAM,OAAO,gBAAgB;IAM3B,YAAmB,IAAW,EAAE,MAAc,EAAE,OAAgB,EAAE,YAAoB;QACpF,IAAI,CAAC,IAAI,GAAG,IAAI,CAAC;QACjB,IAAI,CAAC,MAAM,GAAG,MAAM,CAAC;QACrB,IAAI,CAAC,OAAO,GAAG,OAAO,CAAC;QACvB,IAAI,CAAC,YAAY,GAAG,YAAY,CAAC;IACnC,CAAC;CACF"}
