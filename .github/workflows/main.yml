@@ -26,6 +26,6 @@ jobs:
         with:
           node-version: "18.x"
       - run: |
-       npm install
-       npm run lint
-       npm run test
+         npm install
+         npm run lint
+         npm run test
