@@ -131,3 +131,4 @@ dist
 
 # exclude build files
 framework/lib/
+framework/.vscode/

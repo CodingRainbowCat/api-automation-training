@@ -1,7 +1,9 @@
 import "dotenv/config";
 import { ServiceBase } from "./ServiceBase.js";
-import { Response, Order, Inventory } from "../models";
+import { Response } from "../models/responses/Response.js";
 import { DeleteOrderResponse } from "../models/responses/DeleteOrderResponse.js";
+import { Order } from "../models/Order.js";
+import { Inventory } from "../models/Inventory.js";
 
 export class StoreService extends ServiceBase {
   private static classInstance?: StoreService;
@@ -22,7 +24,6 @@ export class StoreService extends ServiceBase {
     return await this.get<Inventory>(`${this.url}/inventory`, config);
   }
 
-  //WIP
   async postOrder(order: Order, config = this.defaultConfig): Promise<Response<Order>> {
     return await this.post<Order>(`${this.url}/order`, order, config);
   }
