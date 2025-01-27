@@ -7,13 +7,14 @@ on:
     branches: [main]
 
 env:
-  BASEURL: ${{ vars.BASEURL }}
+  BASEURL: ${{ secrets.BASEURL }}
   USER: ${{ secrets.USER }}
   PASSWORD: ${{ secrets.PASSWORD }}
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: Testing
     defaults:
       run:
         working-directory: ./framework
