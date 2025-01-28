@@ -25,8 +25,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "18.x"
-      - name: Test
+      - name: Run npm install and lint
         run: |
             npm install
             npm run lint
-            npm run test
+      - name: Test
+        run: npm run test
