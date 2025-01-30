@@ -61,7 +61,7 @@ describe("Post Order", function () {
     shouldDeleteOrder = false;
   });
 
-  //BUG: [TODO: create a bug and paste the link here. petId must be mandatory but it's taking 0]
+  // BUG: https://github.com/CodingRainbowCat/api-automation-training/issues/4. petId must be mandatory but it's taking 0.
   // eslint-disable-next-line ui-testing/no-disabled-tests
   it.skip("@Smoke - Missing petId", async function () {
     const order: Order = {
@@ -76,7 +76,7 @@ describe("Post Order", function () {
     shouldDeleteOrder = false;
   });
 
-  //BUG: [TODO: create a bug and paste the link here. Quantity should only be = 1, and it's added with 0 when no quantity is provided.]
+  // BUG: https://github.com/CodingRainbowCat/api-automation-training/issues/4. Quantity should only be = 1, and it's added with 0 when no quantity is provided.
   // eslint-disable-next-line ui-testing/no-disabled-tests
   it.skip("@Smoke - Missing quantity", async function () {
     const order: Order = {
@@ -105,7 +105,7 @@ it("@Smoke - Invalid shipDate", async function () {
     shouldDeleteOrder = true;
   });
 
-  //BUG: [TODO: create a bug and paste the link here. Status should be required.]
+  // BUG: https://github.com/CodingRainbowCat/api-automation-training/issues/4. Status should be required but the order is created without it.
   // eslint-disable-next-line ui-testing/no-disabled-tests
   it.skip("@Smoke - Missing status", async function () {
     const order: Order = {
@@ -120,7 +120,7 @@ it("@Smoke - Invalid shipDate", async function () {
     shouldDeleteOrder = false;
   });
 
-  //BUG: [TODO: create a bug and paste the link here. Empty status should return an error.]
+  // BUG: https://github.com/CodingRainbowCat/api-automation-training/issues/4. Empty status should return an error, but it's created with value "".
   // eslint-disable-next-line ui-testing/no-disabled-tests
   it.skip("@Smoke - Invalid status", async function () {
     const order: Order = {
@@ -136,7 +136,7 @@ it("@Smoke - Invalid shipDate", async function () {
     shouldDeleteOrder = false;
   });
 
-  //BUG: [TODO: create a bug and paste the link here. It should not accept duplicated id, but it does and replaces it.]
+  // BUG: https://github.com/CodingRainbowCat/api-automation-training/issues/4. It should not accept duplicated id, but it does and replaces the old order.
   // eslint-disable-next-line ui-testing/no-disabled-tests
   it.skip("@Smoke - Duplicated id", async function () {
     const order: Order = {
@@ -154,7 +154,7 @@ it("@Smoke - Invalid shipDate", async function () {
     shouldDeleteOrder = true;
   });
 
-  //BUG: [TODO: create a bug and paste the link here. It should not create orders for a petId that was already ordered.]
+  // BUG: https://github.com/CodingRainbowCat/api-automation-training/issues/4. It should not create orders for a petId that was already ordered.
   // eslint-disable-next-line ui-testing/no-disabled-tests
   it.skip("@Smoke - Duplicated petId", async function () {
       const order: Order = {
@@ -188,7 +188,7 @@ it("@Smoke - Invalid shipDate", async function () {
     shouldDeleteOrder = false;
   });
 
-  //BUG: [TODO: create a bug and paste the link here. Invalid types should return 400.]
+  // BUG: https://github.com/CodingRainbowCat/api-automation-training/issues/4. Invalid types should return 400.
   // eslint-disable-next-line ui-testing/no-disabled-tests
   it.skip("@Regression - Invalid data type for petId", async function () {
     const order = {
@@ -204,7 +204,7 @@ it("@Smoke - Invalid shipDate", async function () {
     shouldDeleteOrder = false;
   });
 
-  //BUG: [TODO: create a bug and paste the link here. Invalid types should return 400.]
+  // BUG: https://github.com/CodingRainbowCat/api-automation-training/issues/4. Invalid types should return 400.
   // eslint-disable-next-line ui-testing/no-disabled-tests
   it.skip("@Regression - Invalid data type for quantity", async function () {
     const order = {
@@ -220,7 +220,7 @@ it("@Smoke - Invalid shipDate", async function () {
     shouldDeleteOrder = false;
   });
 
-  //BUG: [TODO: create a bug and paste the link here. Invalid types should return 400, not 500, or ignore the field as in other cases.]
+  // BUG: https://github.com/CodingRainbowCat/api-automation-training/issues/4. Invalid types should return 400, not 500, or ignore the field as in other cases.
   // eslint-disable-next-line ui-testing/no-disabled-tests
   it.skip("@Regression - Invalid data type for shipDate", async function () {
     const order = {
@@ -236,7 +236,7 @@ it("@Smoke - Invalid shipDate", async function () {
     shouldDeleteOrder = false;
   });
 
-  //BUG: [TODO: create a bug and paste the link here. Invalid types should return 400.]
+  // BUG: https://github.com/CodingRainbowCat/api-automation-training/issues/4. Invalid types should return 400.
   // eslint-disable-next-line ui-testing/no-disabled-tests
   it.skip("@Regression - Invalid data type for complete", async function () {
     const order = {
@@ -267,7 +267,7 @@ it("@Smoke - Invalid shipDate", async function () {
       shouldDeleteOrder = false;
   });
     
-  //BUG: [TODO: create a bug and paste the link here. Negative values should not be accepted for petIs.]
+  // BUG: https://github.com/CodingRainbowCat/api-automation-training/issues/4. Negative values should not be accepted for petIds.
   // eslint-disable-next-line ui-testing/no-disabled-tests
   it.skip("@Regression - Negative petId", async function () {
     const order: Order = {
@@ -283,7 +283,7 @@ it("@Smoke - Invalid shipDate", async function () {
     shouldDeleteOrder = false;
   });
 
-  //BUG: [TODO: create a bug and paste the link here. Negative values should not be accepted for quantity.]
+  // BUG: https://github.com/CodingRainbowCat/api-automation-training/issues/4. Negative values should not be accepted for quantity.
   // eslint-disable-next-line ui-testing/no-disabled-tests
   it.skip("@Regression - Negative quantity", async function () {
     const order: Order = {
@@ -299,7 +299,7 @@ it("@Smoke - Invalid shipDate", async function () {
     shouldDeleteOrder = false;
   });
 
-  //BUG: [TODO: create a bug and paste the link here. Quantity should only be = 1.]
+  // BUG: https://github.com/CodingRainbowCat/api-automation-training/issues/4. Quantity should only be = 1.
   // eslint-disable-next-line ui-testing/no-disabled-tests
   it.skip("@Regression - Invalid quantity", async function () {
     const order: Order = {
@@ -315,7 +315,7 @@ it("@Smoke - Invalid shipDate", async function () {
     shouldDeleteOrder = false;
   });
 
-  //BUG: [TODO: create a bug and paste the link here. Year can not be 0000. It should return an error or create the order without shipDate as in other cases]
+  // BUG: https://github.com/CodingRainbowCat/api-automation-training/issues/4. Year can not be 0000. It should return an error or create the order without shipDate as in other cases
   // eslint-disable-next-line ui-testing/no-disabled-tests
   it.skip("@Regression - shipDate out of range (year)", async function () {
     const order: Order = {
@@ -347,7 +347,7 @@ it("@Smoke - Invalid shipDate", async function () {
     shouldDeleteOrder = true;
   });
 
-  //BUG: [TODO: create a bug and paste the link here. Leap year date should be accepted.]
+  // BUG: https://github.com/CodingRainbowCat/api-automation-training/issues/4. Leap year date should be accepted.
   // eslint-disable-next-line ui-testing/no-disabled-tests
   it.skip("@Regression - shipDate with right leap year date", async function () {
     const order: Order = {
