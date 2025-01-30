@@ -24,7 +24,7 @@ export class StoreService extends ServiceBase {
     return await this.get<Inventory>(`${this.url}/inventory`, config);
   }
 
-  async postOrder(order: Order, config = this.defaultConfig): Promise<Response<Order>> {
+  async postOrder(order: Order | any, config = this.defaultConfig): Promise<Response<Order>> {
     return await this.post<Order>(`${this.url}/order`, order, config);
   }
 

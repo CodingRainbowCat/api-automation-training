@@ -72,8 +72,7 @@ describe("Post Order", function () {
       complete: false,
     };
     const response = await storeService.postOrder(order);
-    const orderResponse = (response.data) as Order;
-    response.status?.should.not.equal(200, JSON.stringify(orderResponse));
+    response.status?.should.not.equal(200, JSON.stringify(response.data));
     shouldDeleteOrder = false;
   });
 
@@ -88,8 +87,7 @@ describe("Post Order", function () {
       complete: false,
     };
     const response = await storeService.postOrder(order);
-    const orderResponse = (response.data) as Order;
-    response.status?.should.not.equal(200, JSON.stringify(orderResponse));
+    response.status?.should.not.equal(200, JSON.stringify(response.data));
     shouldDeleteOrder = false;
   });
 
@@ -105,8 +103,7 @@ describe("Post Order", function () {
       complete: false,
     };
     const response = await storeService.postOrder(order);
-    const orderResponse = (response.data) as Order;
-    response.status?.should.not.equal(200, JSON.stringify(orderResponse));
+    response.status?.should.not.equal(200, JSON.stringify(response.data));
     shouldDeleteOrder = false;
   });
 
@@ -121,8 +118,7 @@ describe("Post Order", function () {
       complete: false,
     };
     const response = await storeService.postOrder(order);
-    const orderResponse = (response.data) as Order;
-    response.status?.should.not.equal(200, JSON.stringify(orderResponse));
+    response.status?.should.not.equal(200, JSON.stringify(response.data));
     shouldDeleteOrder = false;
   });
 
@@ -138,8 +134,7 @@ describe("Post Order", function () {
       complete: false,
     };
     const response = await storeService.postOrder(order);
-    const orderResponse = (response.data) as Order;
-    response.status?.should.not.equal(200, JSON.stringify(orderResponse));
+    response.status?.should.not.equal(200, JSON.stringify(response.data));
     shouldDeleteOrder = false;
   });
 
@@ -156,16 +151,14 @@ describe("Post Order", function () {
     };
     const response1 = await storeService.postOrder(order);
     const response2 = await storeService.postOrder(order);
-    const orderResponse1 = (response1.data) as Order;
-    const orderResponse2 = (response2.data) as Order;
-    response1.status?.should.equal(200, JSON.stringify(orderResponse1));
-    response2.status?.should.not.equal(200, JSON.stringify(orderResponse2));
+    response1.status?.should.equal(200, JSON.stringify(response1.data));
+    response2.status?.should.not.equal(200, JSON.stringify(response2.data));
     shouldDeleteOrder = true;
   });
 
-    //BUG: [TODO: create a bug and paste the link here. It should not create orders for a petId that was already ordered.]
-    // eslint-disable-next-line ui-testing/no-disabled-tests
-    it.skip("@Smoke - Duplicated petId", async function () {
+  //BUG: [TODO: create a bug and paste the link here. It should not create orders for a petId that was already ordered.]
+  // eslint-disable-next-line ui-testing/no-disabled-tests
+  it.skip("@Smoke - Duplicated petId", async function () {
       const order: Order = {
         id: orderID,
         petId: 1,
@@ -175,12 +168,102 @@ describe("Post Order", function () {
         complete: false,
       };
       const response1 = await storeService.postOrder(order);
-      const orderResponse1 = (response1.data) as Order;
       order.id = orderID + 1;
       const response2 = await storeService.postOrder(order);
-      const orderResponse2 = (response2.data) as Order;
-      response1.status?.should.equal(200, JSON.stringify(orderResponse1));
-      response2.status?.should.not.equal(200, JSON.stringify(orderResponse2));
+      response1.status?.should.equal(200, JSON.stringify(response1.data));
+      response2.status?.should.not.equal(200, JSON.stringify(response2.data));
       shouldDeleteOrder = true;
-    });
+  });
+
+  it("@Regression - Invalid data type for id", async function () {
+    const order = {
+      id: false,
+      petId: 1,
+      quantity: 1,
+      shipDate: new Date(),
+      status: "placed",
+      complete: false,
+    };
+    const response = await storeService.postOrder(order);
+    const orderResponse = (response.data) as Order;
+    orderResponse.id?.should.be.above(0);
+    shouldDeleteOrder = false;
+  });
+
+  it("@Regression - Invalid data type for petId", async function () {
+    const order = {
+      id: orderID,
+      petId: "Cat",
+      quantity: 1,
+      shipDate: new Date(),
+      status: "placed",
+      complete: false,
+    };
+    const response = await storeService.postOrder(order);
+    response.status?.should.equal(500, JSON.stringify(response.data));
+    shouldDeleteOrder = false;
+  });
+
+  it("@Regression - Negative id", async function () {
+      const order: Order = {
+        id: -1,
+        petId: 1,
+        quantity: 1,
+        shipDate: new Date(),
+        status: "placed",
+        complete: false,
+      };
+      const response = await storeService.postOrder(order);
+      const orderResponse = (response.data) as Order;
+      orderResponse.id?.should.be.above(0);
+      shouldDeleteOrder = false;
+  });
+    
+  //BUG: [TODO: create a bug and paste the link here. Negative values should not be accepted for petIs.]
+  // eslint-disable-next-line ui-testing/no-disabled-tests
+  it.skip("@Regression - Negative petId", async function () {
+    const order: Order = {
+      id: orderID,
+      petId: -1,
+      quantity: 1,
+      shipDate: new Date(),
+      status: "placed",
+      complete: false,
+    };
+    const response = await storeService.postOrder(order);
+    response.status?.should.not.equal(200, JSON.stringify(response.data));
+    shouldDeleteOrder = false;
+  });
+
+  //BUG: [TODO: create a bug and paste the link here. Negative values should not be accepted for quantity.]
+  // eslint-disable-next-line ui-testing/no-disabled-tests
+  it.skip("@Regression - Negative quantity", async function () {
+    const order: Order = {
+      id: orderID,
+      petId: 1,
+      quantity: -1,
+      shipDate: new Date(),
+      status: "placed",
+      complete: false,
+    };
+    const response = await storeService.postOrder(order);
+    response.status?.should.not.equal(200, JSON.stringify(response.data));
+    shouldDeleteOrder = false;
+  });
+
+  //BUG: [TODO: create a bug and paste the link here. Quantity should only be = 1.]
+  // eslint-disable-next-line ui-testing/no-disabled-tests
+  it.skip("@Regression - Invalid quantity", async function () {
+    const order: Order = {
+      id: orderID,
+      petId: 1,
+      quantity: 4,
+      shipDate: new Date(),
+      status: "placed",
+      complete: false,
+    };
+    const response = await storeService.postOrder(order);
+    response.status?.should.not.equal(200, JSON.stringify(response.data));
+    shouldDeleteOrder = false;
+  });
 });
