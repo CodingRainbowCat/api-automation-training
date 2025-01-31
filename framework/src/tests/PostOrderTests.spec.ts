@@ -8,18 +8,18 @@ const storeService = new StoreService();
 
 describe("Post Order", function () {
 
-  let orderID: number = 6;
+  const orderId = 6;
   let shouldDeleteOrder = false;
 
     afterEach(async function () {
       if (shouldDeleteOrder) {
-      await storeService.deleteOrder(orderID);
+      await storeService.deleteOrder(orderId);
       }
     });
   
   it("@Smoke - Success case providing id", async function () {
     const order: Order = {
-      id: orderID,
+      id: orderId,
       petId: 1,
       quantity: 1,
       shipDate: new Date(),
@@ -28,7 +28,7 @@ describe("Post Order", function () {
     };
     const postOrderResponse = await storeService.postOrder(order);
     postOrderResponse.status?.should.equal(200, JSON.stringify(postOrderResponse.data));
-    const getOrderResponse = await storeService.getOrder(orderID);
+    const getOrderResponse = await storeService.getOrder(orderId);
     const responseOrder = (getOrderResponse.data) as Order;
     responseOrder.id?.should.equal(order.id);
     responseOrder.petId?.should.equal(order.petId);
@@ -69,7 +69,7 @@ describe("Post Order", function () {
   // eslint-disable-next-line ui-testing/no-disabled-tests
   it.skip("@Smoke - Missing petId", async function () {
     const order: Order = {
-      id: orderID,
+      id: orderId,
       quantity: 1,
       shipDate: new Date(),
       status: "placed",
@@ -84,7 +84,7 @@ describe("Post Order", function () {
   // eslint-disable-next-line ui-testing/no-disabled-tests
   it.skip("@Smoke - Missing quantity", async function () {
     const order: Order = {
-      id: orderID,
+      id: orderId,
       petId: 1,
       shipDate: new Date(),
       status: "placed",
@@ -97,7 +97,7 @@ describe("Post Order", function () {
 
 it("@Smoke - Invalid shipDate", async function () {
     const order: Order = {
-      id: orderID,
+      id: orderId,
       petId: 1,
       quantity: 1,
       shipDate: new Date("Invalid Date"),
@@ -113,7 +113,7 @@ it("@Smoke - Invalid shipDate", async function () {
   // eslint-disable-next-line ui-testing/no-disabled-tests
   it.skip("@Smoke - Missing status", async function () {
     const order: Order = {
-      id: orderID,
+      id: orderId,
       petId: 1,
       quantity: 1,
       shipDate: new Date(),
@@ -128,7 +128,7 @@ it("@Smoke - Invalid shipDate", async function () {
   // eslint-disable-next-line ui-testing/no-disabled-tests
   it.skip("@Smoke - Invalid status", async function () {
     const order: Order = {
-      id: orderID,
+      id: orderId,
       petId: 1,
       quantity: 1,
       shipDate: new Date(),
@@ -144,7 +144,7 @@ it("@Smoke - Invalid shipDate", async function () {
   // eslint-disable-next-line ui-testing/no-disabled-tests
   it.skip("@Smoke - Duplicated id", async function () {
     const order: Order = {
-      id: orderID,
+      id: orderId,
       petId: 1,
       quantity: 1,
       shipDate: new Date(),
@@ -162,7 +162,7 @@ it("@Smoke - Invalid shipDate", async function () {
   // eslint-disable-next-line ui-testing/no-disabled-tests
   it.skip("@Smoke - Duplicated petId", async function () {
       const order: Order = {
-        id: orderID,
+        id: orderId,
         petId: 1,
         quantity: 1,
         shipDate: new Date(),
@@ -170,7 +170,7 @@ it("@Smoke - Invalid shipDate", async function () {
         complete: false,
       };
       const response1 = await storeService.postOrder(order);
-      order.id = orderID + 1;
+      order.id = orderId + 1;
       const response2 = await storeService.postOrder(order);
       response1.status?.should.equal(200, JSON.stringify(response1.data));
       response2.status?.should.not.equal(409, JSON.stringify(response2.data));
@@ -196,7 +196,7 @@ it("@Smoke - Invalid shipDate", async function () {
   // eslint-disable-next-line ui-testing/no-disabled-tests
   it.skip("@Regression - Invalid data type for petId", async function () {
     const order = {
-      id: orderID,
+      id: orderId,
       petId: "Cat",
       quantity: 1,
       shipDate: new Date(),
@@ -212,7 +212,7 @@ it("@Smoke - Invalid shipDate", async function () {
   // eslint-disable-next-line ui-testing/no-disabled-tests
   it.skip("@Regression - Invalid data type for quantity", async function () {
     const order = {
-      id: orderID,
+      id: orderId,
       petId: 1,
       quantity: "Cat",
       shipDate: new Date(),
@@ -228,7 +228,7 @@ it("@Smoke - Invalid shipDate", async function () {
   // eslint-disable-next-line ui-testing/no-disabled-tests
   it.skip("@Regression - Invalid data type for shipDate", async function () {
     const order = {
-      id: orderID,
+      id: orderId,
       petId: 1,
       quantity: 1,
       shipDate: "Cat",
@@ -244,7 +244,7 @@ it("@Smoke - Invalid shipDate", async function () {
   // eslint-disable-next-line ui-testing/no-disabled-tests
   it.skip("@Regression - Invalid data type for complete", async function () {
     const order = {
-      id: orderID,
+      id: orderId,
       petId: 1,
       quantity: 1,
       shipDate: new Date(),
@@ -275,7 +275,7 @@ it("@Smoke - Invalid shipDate", async function () {
   // eslint-disable-next-line ui-testing/no-disabled-tests
   it.skip("@Regression - Negative petId", async function () {
     const order: Order = {
-      id: orderID,
+      id: orderId,
       petId: -1,
       quantity: 1,
       shipDate: new Date(),
@@ -291,7 +291,7 @@ it("@Smoke - Invalid shipDate", async function () {
   // eslint-disable-next-line ui-testing/no-disabled-tests
   it.skip("@Regression - Negative quantity", async function () {
     const order: Order = {
-      id: orderID,
+      id: orderId,
       petId: 1,
       quantity: -1,
       shipDate: new Date(),
@@ -307,7 +307,7 @@ it("@Smoke - Invalid shipDate", async function () {
   // eslint-disable-next-line ui-testing/no-disabled-tests
   it.skip("@Regression - Invalid quantity", async function () {
     const order: Order = {
-      id: orderID,
+      id: orderId,
       petId: 1,
       quantity: 4,
       shipDate: new Date(),
@@ -323,7 +323,7 @@ it("@Smoke - Invalid shipDate", async function () {
   // eslint-disable-next-line ui-testing/no-disabled-tests
   it.skip("@Regression - shipDate out of range (year)", async function () {
     const order: Order = {
-      id: orderID,
+      id: orderId,
       petId: 1,
       quantity: 1,
       shipDate: new Date("0000-01-01"),
@@ -338,7 +338,7 @@ it("@Smoke - Invalid shipDate", async function () {
 
   it("@Regression - shipDate with wrong leap year date", async function () {
     const order: Order = {
-      id: orderID,
+      id: orderId,
       petId: 1,
       quantity: 1,
       shipDate: new Date("2025-02-29"),
@@ -355,7 +355,7 @@ it("@Smoke - Invalid shipDate", async function () {
   // eslint-disable-next-line ui-testing/no-disabled-tests
   it.skip("@Regression - shipDate with right leap year date", async function () {
     const order: Order = {
-      id: orderID,
+      id: orderId,
       petId: 1,
       quantity: 1,
       shipDate: new Date("2024-02-29"),
