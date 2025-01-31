@@ -8,7 +8,7 @@ const storeService = new StoreService();
 
 describe("Post Order", function () {
 
-  let orderID: number;
+  let orderID: number = 6;
   let shouldDeleteOrder = false;
 
     afterEach(async function () {
@@ -18,7 +18,6 @@ describe("Post Order", function () {
     });
   
   it("@Smoke - Success case providing id", async function () {
-    orderID = 6;
     const order: Order = {
       id: orderID,
       petId: 1,
@@ -27,20 +26,23 @@ describe("Post Order", function () {
       status: "placed",
       complete: false,
     };
-    const response = await storeService.postOrder(order);
-    const orderResponse = (response.data) as Order;
-    response.status?.should.equal(200, JSON.stringify(orderResponse));
-    orderResponse.id?.should.equal(order.id);
-    orderResponse.petId?.should.equal(order.petId);
-    orderResponse.quantity?.should.equal(order.quantity);
-    orderResponse.status?.should.equal(order.status);
-    orderResponse.complete?.should.equal(order.complete);
-    const shipDate = new Date(orderResponse.shipDate ?? "");
+    const postOrderResponse = await storeService.postOrder(order);
+    postOrderResponse.status?.should.equal(200, JSON.stringify(postOrderResponse.data));
+    const getOrderResponse = await storeService.getOrder(orderID);
+    const responseOrder = (getOrderResponse.data) as Order;
+    responseOrder.id?.should.equal(order.id);
+    responseOrder.petId?.should.equal(order.petId);
+    responseOrder.quantity?.should.equal(order.quantity);
+    responseOrder.status?.should.equal(order.status);
+    responseOrder.complete?.should.equal(order.complete);
+    const shipDate = new Date(responseOrder.shipDate ?? "");
     shipDate.toLocaleDateString("en-CA").should.equal(order.shipDate?.toLocaleDateString("en-CA"));
     shouldDeleteOrder = true;
   });
 
-  it("@Smoke - Success case without providing id", async function () {
+  // BUG: https://github.com/CodingRainbowCat/api-automation-training/issues/4. The order is not actually being created when an ID is not provided.
+  // eslint-disable-next-line ui-testing/no-disabled-tests
+  it.skip("@Smoke - Success case without providing id", async function () {
     const order: Order = {
       petId: 1,
       quantity: 1,
@@ -48,15 +50,17 @@ describe("Post Order", function () {
       status: "placed",
       complete: false,
     };
-    const response = await storeService.postOrder(order);
-    const orderResponse = (response.data) as Order;
-    response.status?.should.equal(200, JSON.stringify(orderResponse));
-    orderResponse.id?.should.be.a("number");
-    orderResponse.petId?.should.equal(order.petId);
-    orderResponse.quantity?.should.equal(order.quantity);
-    orderResponse.status?.should.equal(order.status);
-    orderResponse.complete?.should.equal(order.complete);
-    const shipDate = new Date(orderResponse.shipDate ?? "");
+    const postOrderResponse = await storeService.postOrder(order);
+    postOrderResponse.status?.should.equal(200, JSON.stringify(postOrderResponse.data));
+    const getOrderResponse = await storeService.getOrder(postOrderResponse.data.id ?? 0);
+    getOrderResponse.status?.should.equal(200, JSON.stringify(getOrderResponse.data));
+    const responseOrder = (getOrderResponse.data) as Order;
+    responseOrder.id?.should.be.a("number");
+    responseOrder.petId?.should.equal(order.petId);
+    responseOrder.quantity?.should.equal(order.quantity);
+    responseOrder.status?.should.equal(order.status);
+    responseOrder.complete?.should.equal(order.complete);
+    const shipDate = new Date(responseOrder.shipDate ?? "");
     shipDate.toLocaleDateString("en-CA").should.equal(order.shipDate?.toLocaleDateString("en-CA"));
     shouldDeleteOrder = false;
   });
