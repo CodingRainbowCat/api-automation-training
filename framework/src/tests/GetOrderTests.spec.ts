@@ -52,7 +52,6 @@ describe("Get Order", function () {
     const id = 9223372016900018001n;
     const response = await storeService.getOrder(id.toString());
     const order = (response.data) as Order;
-    console.log(order);
     response.status.should.equal(400, JSON.stringify(order));
   });
 
@@ -61,7 +60,6 @@ describe("Get Order", function () {
   it.skip("@Regression - Invalid id type", async function () {
     const id = false;
     const response = await storeService.getOrder(id);
-    console.log(response.data);
     response.status.should.equal(400, JSON.stringify(response.data));
   });
 });
