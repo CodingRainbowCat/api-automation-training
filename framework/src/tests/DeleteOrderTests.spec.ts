@@ -56,7 +56,6 @@ describe("Delete Order", function () {
     it.skip("@Regression - Invalid id type", async function () {
       const id = false;
       const response = await storeService.deleteOrder(id);
-      console.log(response.data);
       response.status.should.equal(400, JSON.stringify(response.data));
     });
   });
