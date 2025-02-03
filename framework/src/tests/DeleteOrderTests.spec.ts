@@ -1,6 +1,5 @@
 import "dotenv/config";
 import { StoreService } from "../base/StoreService.js";
-import { DeleteOrderResponse } from "../models/responses/DeleteOrderResponse.js";
 import { Order } from "../models/Order.js";
 import { should } from 'chai';
 should();
@@ -25,9 +24,8 @@ describe("Delete Order", function () {
 
     it("@Smoke - Success case", async function () {
       const response = await storeService.deleteOrder(orderID);
-      const data = response.data as DeleteOrderResponse;
-      response.status.should.equal(200, JSON.stringify(data));
-      data.message?.should.equal(orderID.toString());
+      response.status.should.equal(200, JSON.stringify(response.data));
+      response.data.message?.should.equal(orderID.toString());
     });
 
     it("@Smoke - Unexisting order", async function () {
