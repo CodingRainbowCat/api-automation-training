@@ -36,14 +36,14 @@ describe("Delete Order", function () {
       response.status.should.equal(404, JSON.stringify(response.data));
     });
 
-    // BUG: https://github.com/CodingRainbowCat/api-automation-training/issues/7. The API should return 400 instead of 404 when the provided ID is negative.
+    // BUG: https://github.com/CodingRainbowCat/api-automation-training/issues/10. The API should return 400 instead of 404 when the provided ID is negative.
     // eslint-disable-next-line ui-testing/no-disabled-tests
     it.skip("@Regression - Negative ID", async function () {
       const response = await storeService.deleteOrder(-1);
       response.status.should.equal(400, JSON.stringify(response.data));
     });
 
-    // BUG: https://github.com/CodingRainbowCat/api-automation-training/issues/7. The API should return 400 instead of 404 when the id is out of range. 
+    // BUG: https://github.com/CodingRainbowCat/api-automation-training/issues/10. The API should return 400 instead of 404 when the id is out of range. 
     // eslint-disable-next-line ui-testing/no-disabled-tests
     it.skip("@Regression - ID out of range", async function (){
       let id = 9223372016900018001n;
@@ -51,7 +51,7 @@ describe("Delete Order", function () {
       response.status.should.equal(400, JSON.stringify(response.data));
     });
 
-    // BUG: https://github.com/CodingRainbowCat/api-automation-training/issues/7. The API should return 400 instead of 404 when the ID has an invalid type.
+    // BUG: https://github.com/CodingRainbowCat/api-automation-training/issues/10. The API should return 400 instead of 404 when the ID has an invalid type.
     // eslint-disable-next-line ui-testing/no-disabled-tests
     it.skip("@Regression - Invalid id type", async function () {
       const id = false;
