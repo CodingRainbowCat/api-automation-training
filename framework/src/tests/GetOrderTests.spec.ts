@@ -48,7 +48,7 @@ describe("Get Order", function () {
 
   // BUG: https://github.com/CodingRainbowCat/api-automation-training/issues/7. The API should return 400 when id is out of range, but instead it returns 200 showing the order with the last ID possible. 
   // eslint-disable-next-line ui-testing/no-disabled-tests
-  it.skip("ID out of range", async function (){
+  it.skip("@Regression - ID out of range", async function (){
     const id = 9223372016900018001n;
     const response = await storeService.getOrder(id.toString());
     const order = (response.data) as Order;
