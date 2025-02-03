@@ -1,5 +1,5 @@
 export interface Order {
-  id?: number | undefined;
+  id?: number | string | undefined;
   petId?: number | undefined;
   quantity?: number | undefined;
   shipDate?: Date | undefined;
