@@ -23,10 +23,16 @@ describe("Delete Order", function () {
         await storeService.postOrder(beforeOrder);
       });
 
-    it("Success case", async function () {
+    it("@Smoke - Success case", async function () {
       const response = await storeService.deleteOrder(orderID);
       const data = response.data as DeleteOrderResponse;
       response.status.should.equal(200, JSON.stringify(response.data));
       data.message?.should.equal(orderID.toString());
+    });
+
+    it("@Smoke - Unexisting order", async function () {
+      await storeService.deleteOrder(orderID);
+      const response = await storeService.deleteOrder(orderID);
+      response.status.should.equal(404, JSON.stringify(response.data));
     });
   });
