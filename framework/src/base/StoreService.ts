@@ -32,7 +32,7 @@ export class StoreService extends ServiceBase {
     return await this.get<Order>(`${this.url}/order/${id}`, config);
   }
 
-  async deleteOrder(id: number, config = this.defaultConfig): Promise<Response<DeleteOrderResponse>> {
+  async deleteOrder(id: number | any, config = this.defaultConfig): Promise<Response<DeleteOrderResponse>> {
     return await this.delete<DeleteOrderResponse>(`${this.url}/order/${id}`, config);
   }
 }
