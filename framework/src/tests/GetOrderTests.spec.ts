@@ -8,7 +8,7 @@ const storeService = new StoreService();
 
 describe("Get Order", function () {
 
-    let orderID = 4;
+    const orderID = 4;
 
     before(async function () {
         const beforeOrder: Order = {
@@ -26,10 +26,40 @@ describe("Get Order", function () {
         await storeService.deleteOrder(orderID);
       });
   
-  it("Success case", async function () {
+  it("@Smoke - Success case", async function () {
     const response = await storeService.getOrder(orderID);
     const order = (response.data) as Order;
     response.status.should.equal(200, JSON.stringify(order));
     order.id?.should.equal(orderID);
+  });
+
+  it("@Smoke - Unexisting order", async function () {
+    await storeService.deleteOrder(6);
+    const response = await storeService.getOrder(6);
+    response.status.should.equal(404, JSON.stringify(response.data));
+  });
+
+  // BUG: https://github.com/CodingRainbowCat/api-automation-training/issues/7. The API should return 400 instead of 404 when the provided ID is negative.
+  // eslint-disable-next-line ui-testing/no-disabled-tests
+  it.skip("@Regression - Negative ID", async function () {
+    const response = await storeService.getOrder(-1);
+    response.status.should.equal(400, JSON.stringify(response.data));
+  });
+
+  // BUG: https://github.com/CodingRainbowCat/api-automation-training/issues/7. The API should return 400 when id is out of range, but instead it returns 200 showing the order with the last ID possible. 
+  // eslint-disable-next-line ui-testing/no-disabled-tests
+  it.skip("@Regression - ID out of range", async function (){
+    const id = 9223372016900018001n;
+    const response = await storeService.getOrder(id.toString());
+    const order = (response.data) as Order;
+    response.status.should.equal(400, JSON.stringify(order));
+  });
+
+  // BUG: https://github.com/CodingRainbowCat/api-automation-training/issues/7. The API should return 400 instead of 404 when the ID has an invalid type.
+  // eslint-disable-next-line ui-testing/no-disabled-tests
+  it.skip("@Regression - Invalid id type", async function () {
+    const id = false;
+    const response = await storeService.getOrder(id);
+    response.status.should.equal(400, JSON.stringify(response.data));
   });
 });
