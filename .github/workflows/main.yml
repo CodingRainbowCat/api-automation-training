@@ -25,7 +25,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "18.x"
-      # Install and start the API
+      # Install and start the CatCafe API
       - name: Install and start API
         working-directory: ./CatCafeProject
         run: |
