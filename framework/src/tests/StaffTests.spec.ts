@@ -47,9 +47,8 @@ describe("Staff Tests", function () {
         const response = await staffService.postStaff(newStaff, authConfig);
         response.status.should.equal(201, JSON.stringify(response.data));
         const createdStaff = response.data as Staff;
-        console.log(createdStaff);
         createdStaff.should.have.property('id');
-        await staffService.deleteStaff(createdStaff.id, authConfig);
+        //await staffService.deleteStaff(createdStaff.id, authConfig);
       });
     
       it("@Smoke - Delete staff - Success case", async function () {
