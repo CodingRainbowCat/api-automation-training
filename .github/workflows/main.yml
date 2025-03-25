@@ -25,6 +25,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "18.x"
+      # Install and start the API
+      - name: Install and start API
+        working-directory: ./CatCafeProject
+        run: |
+          npm install
+          npm run dev &  # Start the server in the background
+          sleep 5        # Give the server time to start
+      # Back to the test framework
       - name: Run npm install and lint
         run: |
             npm install
