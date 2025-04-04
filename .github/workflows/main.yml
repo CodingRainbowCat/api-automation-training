@@ -10,6 +10,7 @@ env:
   BASEURL: ${{ vars.BASEURL }}
   USER: ${{ secrets.USER }}
   PASSWORD: ${{ secrets.PASSWORD }}
+  JWT_SECRET: ${{ secrets.PASSWORD }}
 
 jobs:
   build:
