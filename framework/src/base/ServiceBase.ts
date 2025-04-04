@@ -17,23 +17,6 @@ export class ServiceBase {
     return process.env["BASEURL"] ?? "";
   }
 
-  async authenticate(): Promise<AxiosRequestConfig> {
-    const username = process.env["USER"];
-    const password = process.env["PASSWORD"];
-
-    if (!username || !password) {
-      throw new Error("Missing username or password in environment variables.");
-    }
-
-    const config = {
-      headers: {
-        Authorization: 'Basic ' + Buffer.from(`${username}:${password}`).toString('base64'),
-      },
-    }
-
-    return config;
-  }
-
   protected async get<T>(
     url: string,
     config: AxiosRequestConfig = this.defaultConfig,

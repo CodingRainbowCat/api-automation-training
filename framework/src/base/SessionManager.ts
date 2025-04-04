@@ -1,12 +1,14 @@
+import { CredentialsModel } from "../models/request/CredentialsModel";
+
 export class SessionManager {
   private static authTokenCache: {
-    [key: string]: { token: string; timestamp: number } | null;
+    [key: string]: { accessToken: string; refreshToken: string; timestamp: number } | null;
   } = {};
 
   private static tokenExpiryDuration = 15 * 60 * 1000; // 15 minutes
 
-  static getCachedToken(username: string, password: string): string | null {
-    const cacheKey = `${username}:${password}`;
+  static getCachedAccessToken(credentials: CredentialsModel): string | null {
+    const cacheKey = `${credentials.username}:${credentials.password}`;
     const cachedData = SessionManager.authTokenCache[cacheKey];
 
     if (cachedData) {
@@ -14,19 +16,38 @@ export class SessionManager {
       const tokenAge = currentTime - cachedData.timestamp;
 
       if (tokenAge < SessionManager.tokenExpiryDuration) {
-        return cachedData.token;
+        return cachedData.accessToken;
       } else {
-        delete SessionManager.authTokenCache[cacheKey];
+        return 'expired';
       }
     }
 
     return null;
   }
 
-  static storeToken(username: string, password: string, token: string): void {
-    const cacheKey = `${username}:${password}`;
+  static getCachedRefreshToken(credentials: CredentialsModel): string | null {
+    const cacheKey = `${credentials.username}:${credentials.password}`;
+    const cachedData = SessionManager.authTokenCache[cacheKey];
+
+    if (cachedData) {
+      const currentTime = Date.now();
+      const tokenAge = currentTime - cachedData.timestamp;
+
+      if (tokenAge < SessionManager.tokenExpiryDuration) {
+        return cachedData.accessToken;
+      } else {
+        return 'expired';
+      }
+    }
+
+    return null;
+  }
+
+  static storeToken(credentials: CredentialsModel, accessToken: string, refreshToken: string): void {
+    const cacheKey = `${credentials.username}:${credentials.password}`;
     SessionManager.authTokenCache[cacheKey] = {
-      token,
+      accessToken,
+      refreshToken,
       timestamp: Date.now(),
     };
   }

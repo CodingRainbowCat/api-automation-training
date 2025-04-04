@@ -1,17 +1,25 @@
 import "dotenv/config";
 import { StaffService } from "../base/StaffService.js";
+import { AuthService } from "../base/AuthService.js";
 import { Staff } from "../models/Staff.js";
+import { CredentialsModel } from "../models/request/CredentialsModel.js";
 import { should } from 'chai';
+import { AxiosRequestConfig } from "axios";
 should();
 
 const staffService = new StaffService();
+const authService = new AuthService();
+const credentials: CredentialsModel = {
+  username: process.env["USER"],
+  password: process.env["PASSWORD"]
+};
 
 describe("Staff Tests", function () {
 
-    let authConfig = {};
+    let authConfig: AxiosRequestConfig = {};
 
-    before (async function () {
-        authConfig = await staffService.authenticate();
+    beforeEach (async function () {
+        authConfig = await authService.getConfig(credentials);
     });
 
     it("@Smoke - Get all - Success case", async function () {
