@@ -1,5 +1,5 @@
-import { Router } from 'express';
-import { AdopterController } from '../controllers/adopterController.js';
+import { Router } from "express";
+import { AdopterController } from "../controllers/adopterController.js";
 
 const router = Router();
 const adopterController = new AdopterController();
@@ -11,6 +11,7 @@ const adopterController = new AdopterController();
  *     tags:
  *       - Adopters
  *     summary: Get an adopter by ID
+ *     security: []
  *     description: Retrieve a single adopter by their ID
  *     parameters:
  *       - in: path
@@ -48,6 +49,7 @@ const adopterController = new AdopterController();
  *     tags:
  *       - Adopters
  *     summary: Delete an Adopter
+ *     security: []
  *     description: Remove an Adopter from the café's DB
  *     parameters:
  *       - in: path
@@ -73,12 +75,13 @@ const adopterController = new AdopterController();
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
- * 
- * /api/Adopters:
+ *
+ * /api/adopters:
  *   get:
  *     tags:
  *       - Adopters
  *     summary: Get all the Adopters
+ *     security: []
  *     description: Retrieve all the adopters in the café
  *     responses:
  *       200:
@@ -103,6 +106,7 @@ const adopterController = new AdopterController();
  *     tags:
  *       - Adopters
  *     summary: Add a new adopter
+ *     security: []
  *     description: Add a new cat adopter
  *     requestBody:
  *       required: true
@@ -111,9 +115,6 @@ const adopterController = new AdopterController();
  *           schema:
  *             type: object
  *             properties:
- *               id:
- *                 type: integer
- *                 description: ID of the adopter, without dots and hyphen.
  *               name:
  *                 type: string
  *                 description: First name.
@@ -151,10 +152,9 @@ const adopterController = new AdopterController();
  *               $ref: '#/components/schemas/Error'
  */
 
-
-router.get('/adopters/:id', (req, res) => adopterController.getAdopter(req, res));
-router.get('/adopters', (req, res) => adopterController.getAdopters(req, res));
-router.post('/adopters', (req, res) => adopterController.addAdopter(req, res));
-router.delete('/adopters/:id', (req, res) => adopterController.removeAdopter(req, res));
+router.get("/adopters/:id", (req, res) => adopterController.getAdopter(req, res));
+router.get("/adopters", (req, res) => adopterController.getAdopters(req, res));
+router.post("/adopters", (req, res) => adopterController.addAdopter(req, res));
+router.delete("/adopters/:id", (req, res) => adopterController.removeAdopter(req, res));
 
 export default router;
