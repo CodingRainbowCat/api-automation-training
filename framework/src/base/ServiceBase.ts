@@ -1,6 +1,9 @@
 import { AxiosResponse, type AxiosRequestConfig } from "axios";
 import { ApiClient } from "./ApiClient.js";
 import { Response } from "../models/responses/Response";
+import { SessionManager } from "./SessionManager.js";
+import { CredentialsModel } from "../models/request/CredentialsModel";
+import { SessionResponse } from "../models/responses/SessionResponse.js";
 
 export class ServiceBase {
   private api: ApiClient;
@@ -15,6 +18,41 @@ export class ServiceBase {
 
   get baseUrl(): string {
     return process.env["BASEURL"] ?? "";
+  }
+
+  set setDefaultConfig(config: AxiosRequestConfig) {
+    this.defaultConfig = config;
+  }
+  
+  async authenticate(credentials: CredentialsModel): Promise<void> {
+    const sessionStatus = SessionManager.getCachedAccessToken(credentials); 
+    console.log('Session status:', sessionStatus);
+    console.log('credentials:', credentials);
+    let accessToken = '';
+    if (sessionStatus === null) {
+        console.log('URL: ' + this.url);
+        const sessionResponse = await this.post<SessionResponse>(`${this.baseUrl}/auth/logIn`, credentials, this.defaultConfig);
+        SessionManager.storeToken(credentials, sessionResponse.data.accessToken, sessionResponse.data.refreshToken);
+        accessToken = sessionResponse.data.accessToken;
+        console.log('Session response:', sessionResponse.data);
+    }
+    else if (sessionStatus === 'expired') {
+        const sessionResponse = await this.post<SessionResponse>(`${this.baseUrl}/auth/refresh`, SessionManager.getCachedRefreshToken(credentials), this.defaultConfig);
+        SessionManager.storeToken(credentials, sessionResponse.data.accessToken, sessionResponse.data.refreshToken);
+        accessToken = sessionResponse.data.accessToken;
+        console.log('Session response:', sessionResponse.data);
+    }
+    else {
+        accessToken = sessionStatus;
+        console.log('Session status 2:', sessionStatus);
+    }
+    
+    const config = {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    };
+    this.setDefaultConfig = config;
   }
 
   protected async get<T>(

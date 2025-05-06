@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { CatService } from "../base/CatService.js";
+import { CatService } from "../models/services/CatService.js";
 import { Cat } from "../models/Cat.js";
 import { should } from 'chai';
 should();

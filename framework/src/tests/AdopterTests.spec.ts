@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { AdopterService } from "../base/AdopterService.js";
+import { AdopterService } from "../models/services/AdopterService.js";
 import { Adopter } from "../models/Adopter.js";
 import { should } from 'chai';
 should();

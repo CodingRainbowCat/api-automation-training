@@ -1,21 +1,12 @@
 import "dotenv/config";
-import { ServiceBase } from "./ServiceBase.js";
-import { Response } from "../models/responses/Response.js";
-import { Adopter } from "../models/Adopter.js";
+import { ServiceBase } from "../../base/ServiceBase.js";
+import { Response } from "../responses/Response.js";
+import { Adopter } from "../Adopter.js";
 
 export class AdopterService extends ServiceBase {
-  private static classInstance?: AdopterService;
 
   public constructor() {
     super("");
-  }
-
-  public static getInstance() {
-    if (!this.classInstance) {
-      this.classInstance = new AdopterService();
-    }
-
-    return this.classInstance;
   }
 
   async getAdopter(id: number | any, config = this.defaultConfig): Promise<Response<Adopter>> {

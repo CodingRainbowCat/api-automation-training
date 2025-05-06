@@ -1,14 +1,11 @@
 import "dotenv/config";
-import { StaffService } from "../base/StaffService.js";
-import { AuthService } from "../base/AuthService.js";
+import { StaffService } from "../models/services/StaffService.js";
 import { Staff } from "../models/Staff.js";
 import { CredentialsModel } from "../models/request/CredentialsModel.js";
 import { should } from 'chai';
-import { AxiosRequestConfig } from "axios";
 should();
 
 const staffService = new StaffService();
-const authService = new AuthService();
 const credentials: CredentialsModel = {
   username: process.env["USER"],
   password: process.env["PASSWORD"]
@@ -16,14 +13,12 @@ const credentials: CredentialsModel = {
 
 describe("Staff Tests", function () {
 
-    let authConfig: AxiosRequestConfig = {};
-
     beforeEach (async function () {
-        authConfig = await authService.getConfig(credentials);
+        await staffService.authenticate(credentials);
     });
 
     it("@Smoke - Get all - Success case", async function () {
-        const response = await staffService.getAllStaff(authConfig);
+        const response = await staffService.getAllStaff();
         const staff = response.data as Staff[];
         response.status.should.equal(200, JSON.stringify(response.data));
         staff.should.be.a('array');
@@ -31,7 +26,7 @@ describe("Staff Tests", function () {
 
     it("@Smoke - Get staff - Success case", async function () {
     const staffID = 'b339f710-6762-4c41-a0c2-2869eb8e1b11'
-    const response = await staffService.getStaff(staffID, authConfig);
+    const response = await staffService.getStaff(staffID);
     const staff = (response.data) as Staff;
     response.status.should.equal(200, JSON.stringify(response.data));
     staff.id?.should.equal(staffID);
@@ -40,7 +35,7 @@ describe("Staff Tests", function () {
     // BUG: https://github.com/CodingRainbowCat/api-automation-training/issues/7. The API should return 400 instead of 404 when the provided ID is negative.
     // eslint-disable-next-line ui-testing/no-disabled-tests
     it.skip("@Regression - Negative ID", async function () {
-    const response = await staffService.getStaff(-1, authConfig);
+    const response = await staffService.getStaff(-1);
     response.status.should.equal(400, JSON.stringify(response.data));
     });
 
@@ -52,11 +47,11 @@ describe("Staff Tests", function () {
           dateJoined: new Date(),
           role: "Veterinarian"
         };
-        const response = await staffService.postStaff(newStaff, authConfig);
+        const response = await staffService.postStaff(newStaff);
         response.status.should.equal(201, JSON.stringify(response.data));
         const createdStaff = response.data as Staff;
         createdStaff.should.have.property('id');
-        await staffService.deleteStaff(createdStaff.id, authConfig);
+        await staffService.deleteStaff(createdStaff.id);
       });
     
       it("@Smoke - Delete staff - Success case", async function () {
@@ -67,8 +62,8 @@ describe("Staff Tests", function () {
           dateJoined: new Date(),
           role: "Assistant"
         };
-        const createResponse = await staffService.postStaff(newStaff, authConfig);
-        const deleteResponse = await staffService.deleteStaff(createResponse.data.id, authConfig);
+        const createResponse = await staffService.postStaff(newStaff);
+        const deleteResponse = await staffService.deleteStaff(createResponse.data.id);
         deleteResponse.status.should.equal(204, JSON.stringify(deleteResponse.data));
       });
 });
